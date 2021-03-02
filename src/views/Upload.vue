@@ -40,6 +40,7 @@
           class="form-control-file"
           id="benford"
           @change="setFile"
+          accept=".csv, .txt"
         />
       </div>
       <h4>Pick delimeter</h4>
@@ -92,14 +93,16 @@
         Submit
       </button>
     </form>
-    <div v-if="isLoading">
-      <p>Loading...</p>
+
+    <div v-if="message !== ''">
+      <p>{{ message }}</p>
     </div>
   </base-section>
   <process-file
     v-if="hasFile && optionsSet"
     :file="file"
     :options="options"
+    @clear-file="clear"
   ></process-file>
 </template>
 
@@ -115,14 +118,30 @@ export default {
       options: null,
       optionsSet: false,
       delimeter: "tab",
+      message: "",
     };
   },
   methods: {
+    clear(message) {
+      this.optionsSet = false;
+      this.options = null;
+      this.delimeter = "tab";
+      this.hasFIle = false;
+      this.message = message;
+    },
     setFile(event) {
-      this.file = event.target.files[0];
+      const extension = event.target.files[0].name.slice(
+        event.target.files[0].name.lastIndexOf(".")
+      );
+      if (extension === ".csv" || extension === ".txt") {
+        this.file = event.target.files[0];
+        this.message = "";
+      } else {
+        this.message =
+          "Seems like you picked file with wrong extension. You can upload only .csv or .txt files. Try again!";
+      }
     },
     setOptions() {
-      console.log("Delimeter: ", this.delimeter);
       this.options = {
         delimeter: this.delimeter,
       };
@@ -131,6 +150,7 @@ export default {
       this.hasFile = true;
       this.setOptions();
       this.optionsSet = true;
+      this.message = "";
     },
   },
 };

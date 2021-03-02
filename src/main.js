@@ -7,6 +7,7 @@ import BaseSection from "./components/ui/BaseSection";
 
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "chart.js";
 
 createApp(App)
   .use(store)
