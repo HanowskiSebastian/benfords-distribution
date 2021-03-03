@@ -1,10 +1,30 @@
-import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+import { mount } from "@vue/test-utils";
+import Home from "@/views/Home.vue";
+import BaseSection from "@/components/ui/BaseSection";
+import { createRouter, createWebHistory } from "vue-router";
 
-test("renders props.msg when passed", () => {
-  const msg = "new message";
-  const wrapper = shallowMount(HelloWorld, {
-    props: { msg },
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: "/",
+      name: "Home",
+      component: Home,
+    },
+  ],
+});
+
+test("test router", async () => {
+  router.push("/");
+  await router.isReady();
+  const msg = "Benford's law";
+  const wrapper = mount(Home, {
+    global: {
+      plugins: [router],
+      stubs: {
+        BaseSection,
+      },
+    },
   });
   expect(wrapper.text()).toContain(msg);
 });

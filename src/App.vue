@@ -9,6 +9,3 @@ export default {
   components: { TheHeader },
 };
 </script>
-
-<style lang="scss">
-</style>
